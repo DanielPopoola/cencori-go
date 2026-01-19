@@ -53,26 +53,3 @@ var (
 	ErrProvider            = errors.New("PROVIDER_ERROR")
 	ErrContentFiltered     = errors.New("CONTENT_FILTERED")
 )
-
-func mapCodeToSentinel(code string) error {
-	switch code {
-	case "INVALID_API_KEY":
-		return ErrInvalidApiKey
-	case "SECURITY_VIOLATION":
-		return ErrSecurityViolation
-	case "RATE_LIMIT_EXCEEDED":
-		return ErrRateLimited
-	case "INSUFFICIENT_CREDITS":
-		return ErrInsufficientCredits
-	case "TIER_RESTRICTED":
-		return ErrTierRestricted
-	case "INVALID_MODEL":
-		return ErrInvalidModel
-	case "PROVIDER_ERROR":
-		return ErrProvider
-	case "CONTENT_FILTERED":
-		return ErrContentFiltered
-	default:
-		return nil
-	}
-}

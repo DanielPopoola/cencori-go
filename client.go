@@ -36,7 +36,7 @@ type Option func(*ClientOptions)
 func NewClient(opts ...Option) (*Client, error) {
 	config := &ClientOptions{
 		BaseURL: "https://cencori.com",
-		Timeout: 30,
+		Timeout: 30 * time.Second,
 	}
 	for _, opt := range opts {
 		opt(config)

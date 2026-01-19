@@ -29,7 +29,7 @@ func (s *ChatService) Chat(ctx context.Context, params ChatParams) (*ChatRespons
 // Stream sends a chat request with streaming enabled and returns a channel that receives
 // chat response chunks as they arrive from the server. The stream continues until the server
 // sends a "[DONE]" message or an error occurs. The context can be used to cancel the stream.
-// If the context is cancelled, an error is sent on the channel before it closes.
+// If the context is cancelled, it simply closes.
 // The returned channel will be closed when the stream ends or an error occurs.
 func (s *ChatService) Stream(ctx context.Context, params ChatParams) (<-chan StreamChunk, error) {
 	params.Stream = true
@@ -69,47 +69,53 @@ func (s *ChatService) Stream(ctx context.Context, params ChatParams) (<-chan Str
 		defer close(chunks)
 		defer resp.Body.Close()
 
+		go func() {
+			<-ctx.Done()
+			resp.Body.Close()
+		}()
+
 		reader := bufio.NewReader(resp.Body)
 
 		for {
-			select {
-			case <-ctx.Done():
-				chunks <- StreamChunk{Err: ctx.Err()}
-				return
-			default:
-			}
-
 			line, err := reader.ReadString('\n')
+
 			if err != nil {
+				if ctx.Err() != nil {
+					return
+				}
+
 				if err == io.EOF {
 					return
 				}
-				chunks <- StreamChunk{Err: fmt.Errorf("stream read : %w", err)}
+
+				chunks <- StreamChunk{Err: fmt.Errorf("stream read: %w", err)}
 				return
 			}
 
 			line = strings.TrimSpace(line)
 
+			// Ignore comments / empty lines / non-data frames
 			if !strings.HasPrefix(line, "data: ") {
 				continue
 			}
 
 			data := strings.TrimPrefix(line, "data: ")
 
-			// Stream termination
 			if data == "[DONE]" {
 				return
 			}
 
-			// Try decode as normal chunk
-			var chunk StreamChunk
-			if err := json.Unmarshal([]byte(data), &chunk); err != nil {
+			if strings.Contains(data, "\"error\":") {
 				var apiErr APIError
-				if err2 := json.Unmarshal([]byte(data), &apiErr); err2 != nil {
+				if err := json.Unmarshal([]byte(data), &apiErr); err == nil {
+					apiErr.fillSentinel()
 					chunks <- StreamChunk{Err: &apiErr}
 					return
 				}
+			}
 
+			var chunk StreamChunk
+			if err := json.Unmarshal([]byte(data), &chunk); err != nil {
 				chunks <- StreamChunk{Err: fmt.Errorf("unmarshal chunk: %w", err)}
 				return
 			}
