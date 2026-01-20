@@ -44,6 +44,36 @@ type ChatResponse struct {
 	Usage Usage `json:"usage"`
 }
 
+// Completions Models.
+type CompletionParams struct {
+	Prompt      string   `json:"prompt"`
+	Model       string   `json:"model"`
+	Temperature *float64 `json:"temperature,omitempty"`
+	MaxTokens   *int     `json:"max_tokens,omitempty"`
+}
+
+// Embedding Models.
+type EmbeddingParams struct {
+	Input any    `json:"input"` // string or []string
+	Model string `json:"model"`
+}
+
+type EmbeddingUsage struct {
+	TotalTokens int `json:"total_tokens"`
+}
+
+type EmbeddingData struct {
+	Embedding []float64 `json:"embedding"`
+	Index     int       `json:"index"`
+}
+
+type EmbeddingResponse struct {
+	Model  string          `json:"model"`
+	Data   []EmbeddingData `json:"data"`
+	Usage  EmbeddingUsage  `json:"usage"`
+	Object string          `json:"object"`
+}
+
 // Stream Response.
 type StreamChunk struct {
 	ID      string         `json:"id,omitempty"`
