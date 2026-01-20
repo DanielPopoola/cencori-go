@@ -5,7 +5,7 @@
 [![CI](https://github.com/DanielPopoola/cencori-go/workflows/Go/badge.svg)](https://github.com/DanielPopoola/cencori-go/actions)
 [![codecov](https://codecov.io/gh/DanielPopoola/cencori-go/branch/main/graph/badge.svg)](https://codecov.io/gh/DanielPopoola/cencori-go)
 
-Unofficial Go SDK for the Cencori AI API - unified access to OpenAI, Anthropic, and Google models with built-in security, logging, and cost tracking.
+Official Go SDK for the Cencori AI API - unified access to OpenAI, Anthropic, and Google models with built-in security, logging, and cost tracking.
 
 ## Features
 
