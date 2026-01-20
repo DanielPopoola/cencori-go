@@ -7,13 +7,13 @@ import (
 )
 
 type ClientOptions struct {
-	ApiKey  string
+	APIKey  string
 	BaseURL string
 	Timeout time.Duration
 }
 
-func WithApiKey(apiKey string) Option {
-	return func(c *ClientOptions) { c.ApiKey = apiKey }
+func WithAPIKey(apiKey string) Option {
+	return func(c *ClientOptions) { c.APIKey = apiKey }
 }
 
 func WithBaseURL(baseURL string) Option {
@@ -42,12 +42,12 @@ func NewClient(opts ...Option) (*Client, error) {
 		opt(config)
 	}
 
-	if config.ApiKey == "" {
-		return nil, errors.New("You need a valid API Key to use this client")
+	if config.APIKey == "" {
+		return nil, errors.New("you need a valid API Key to use this client")
 	}
 
 	c := &Client{
-		ApiKey:  config.ApiKey,
+		ApiKey:  config.APIKey,
 		BaseURL: config.BaseURL,
 		httpClient: &http.Client{
 			Timeout: config.Timeout,

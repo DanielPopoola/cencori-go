@@ -10,7 +10,7 @@ import (
 )
 
 func handleError(resp *http.Response) error {
-	body, _ := io.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body) //nolint:errcheck // reading the response body; error can be ignored here.
 	var apiErr APIError
 	if err := json.Unmarshal(body, &apiErr); err != nil {
 		return &APIError{
@@ -19,7 +19,7 @@ func handleError(resp *http.Response) error {
 		}
 	}
 	apiErr.StatusCode = resp.StatusCode
-	apiErr.fillSentinel() // Attach the ErrInvalidApiKey etc.
+	apiErr.fillSentinel() // Attach the ErrInvalidAPIKey etc.
 	return &apiErr
 }
 
@@ -71,7 +71,7 @@ func doRequest[Req any, Resp any](
 	if err != nil {
 		return nil, fmt.Errorf("execute request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, handleError(resp)

@@ -30,9 +30,9 @@ func TestChat_Success(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
-	resp, err := client.Chat.Chat(context.Background(), ChatParams{
+	resp, err := client.Chat.Chat(context.Background(), &ChatParams{
 		Model: "gpt-3.5-turbo",
 		Messages: []Message{
 			{Role: "user", Content: "Hi"},
@@ -57,9 +57,9 @@ func TestChat_503Error(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
-	_, err := client.Chat.Chat(context.Background(), ChatParams{})
+	_, err := client.Chat.Chat(context.Background(), &ChatParams{})
 
 	if err == nil {
 		t.Fatal("expected error, got nil")
@@ -83,9 +83,9 @@ func TestChat_Stream_Success(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
-	stream, err := client.Chat.Stream(context.Background(), ChatParams{})
+	stream, err := client.Chat.Stream(context.Background(), &ChatParams{})
 	if err != nil {
 		t.Fatalf("failed to start stream: %v", err)
 	}
@@ -113,9 +113,9 @@ func TestChat_Stream_MidErrorFrame(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
-	stream, err := client.Chat.Stream(context.Background(), ChatParams{})
+	stream, err := client.Chat.Stream(context.Background(), &ChatParams{})
 	if err != nil {
 		t.Fatalf("failed to start stream: %v", err)
 	}
@@ -146,10 +146,10 @@ func TestChat_Stream_ContextCancel(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
 	ctx, cancel := context.WithCancel(context.Background())
-	stream, err := client.Chat.Stream(ctx, ChatParams{})
+	stream, err := client.Chat.Stream(ctx, &ChatParams{})
 	if err != nil {
 		t.Fatalf("failed to start stream: %v", err)
 	}
@@ -180,7 +180,7 @@ func TestPathBuilding_OrgProject(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
 	proj, err := client.Projects.Get(context.Background(), "my-org", "my-project")
 	if err != nil {
@@ -198,9 +198,9 @@ func TestErrorDecoding_InvalidJSON(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
-	_, err := client.Chat.Chat(context.Background(), ChatParams{})
+	_, err := client.Chat.Chat(context.Background(), &ChatParams{})
 
 	if err == nil {
 		t.Fatal("expected error, got nil")
@@ -221,7 +221,7 @@ func TestConcurrency_Race(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
 	var wg sync.WaitGroup
 	numRequests := 20
@@ -229,7 +229,7 @@ func TestConcurrency_Race(t *testing.T) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			_, err := client.Chat.Chat(context.Background(), ChatParams{})
+			_, err := client.Chat.Chat(context.Background(), &ChatParams{})
 			if err != nil {
 				t.Errorf("concurrent request failed: %v", err)
 			}
@@ -251,9 +251,9 @@ func TestHeaderInjection(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey(apiKey), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey(apiKey), WithBaseURL(server.URL))
 
-	_, err := client.Chat.Chat(context.Background(), ChatParams{})
+	_, err := client.Chat.Chat(context.Background(), &ChatParams{})
 	if err != nil {
 		t.Fatalf("request failed: %v", err)
 	}

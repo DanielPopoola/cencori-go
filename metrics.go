@@ -6,7 +6,7 @@ import (
 )
 
 // MetricsService provides methods for fetching analytics for projects
-// It uses a Client to communicate with the metrics API endpoints
+// It uses a Client to communicate with the metrics API endpoints.
 type MetricsService struct {
 	client *Client
 }

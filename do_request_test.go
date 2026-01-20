@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestDoRequest_Sucess(t *testing.T) {
+func TestDoRequest_Success(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("CENCORI_API_KEY") != "test-key" {
 			t.Fatal("API key not sent")
@@ -53,8 +53,8 @@ func TestDoRequest_401MapsToTypedError(t *testing.T) {
 
 	_, err := doRequest[any, any](client, context.Background(), "GET", "/test", nil)
 
-	if !errors.Is(err, ErrInvalidApiKey) {
-		t.Fatalf("expected ErrInvalidApiKey, got %v", err)
+	if !errors.Is(err, ErrInvalidAPIKey) {
+		t.Fatalf("expected ErrInvalidAPIKey, got %v", err)
 	}
 
 	var apiErr *APIError
@@ -76,7 +76,7 @@ func TestDoRequest_429MapsToErrRateLimited(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient(WithApiKey("test-key"), WithBaseURL(server.URL))
+	client, _ := NewClient(WithAPIKey("test-key"), WithBaseURL(server.URL))
 
 	_, err := doRequest[any, any](client, context.Background(), "GET", "/test", nil)
 

@@ -27,7 +27,7 @@ func (e *APIError) Unwrap() error {
 func (e *APIError) fillSentinel() {
 	switch e.Code {
 	case "INVALID_API_KEY":
-		e.Err = ErrInvalidApiKey
+		e.Err = ErrInvalidAPIKey
 	case "RATE_LIMIT_EXCEEDED":
 		e.Err = ErrRateLimited
 	case "INSUFFICIENT_CREDITS":
@@ -44,7 +44,7 @@ func (e *APIError) fillSentinel() {
 }
 
 var (
-	ErrInvalidApiKey       = errors.New("INVALID_API_KEY")
+	ErrInvalidAPIKey       = errors.New("INVALID_API_KEY")
 	ErrSecurityViolation   = errors.New("SECURITY_VIOLATION")
 	ErrRateLimited         = errors.New("RATE_LIMIT_EXCEEDED")
 	ErrInsufficientCredits = errors.New("INSUFFICIENT_CREDITS")

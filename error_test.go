@@ -60,7 +60,7 @@ func TestAPIError_fillSentinel(t *testing.T) {
 		code     string
 		sentinel error
 	}{
-		{"INVALID_API_KEY", ErrInvalidApiKey},
+		{"INVALID_API_KEY", ErrInvalidAPIKey},
 		{"RATE_LIMIT_EXCEEDED", ErrRateLimited},
 		{"INSUFFICIENT_CREDITS", ErrInsufficientCredits},
 		{"TIER_RESTRICTED", ErrTierRestricted},
@@ -93,7 +93,7 @@ func TestHandleError(t *testing.T) {
 			name:       "invalid api key",
 			statusCode: 401,
 			body:       `{"code":"INVALID_API_KEY","error":"Invalid key"}`,
-			wantErr:    ErrInvalidApiKey,
+			wantErr:    ErrInvalidAPIKey,
 			wantCode:   "INVALID_API_KEY",
 		},
 		{
@@ -124,8 +124,8 @@ func TestHandleError(t *testing.T) {
 				t.Fatal("handleError() should return an error")
 			}
 
-			apiErr, ok := err.(*APIError)
-			if !ok {
+			var apiErr *APIError
+			if !errors.As(err, &apiErr) {
 				t.Fatalf("handleError() should return *APIError, got %T", err)
 			}
 

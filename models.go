@@ -2,7 +2,7 @@ package cencori
 
 import "time"
 
-// Shared Components
+// Shared Components.
 type Usage struct {
 	PromptTokens     int `json:"prompt_tokens"`
 	CompletionTokens int `json:"completion_tokens"`
@@ -15,7 +15,7 @@ type Stats struct {
 	LastUsedAt    *time.Time `json:"last_used_at,omitempty"`
 }
 
-// Chat Models
+// Chat Models.
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
@@ -44,7 +44,7 @@ type ChatResponse struct {
 	Usage Usage `json:"usage"`
 }
 
-// Stream Response
+// Stream Response.
 type StreamChunk struct {
 	ID      string         `json:"id,omitempty"`
 	Object  string         `json:"object,omitempty"`
@@ -65,7 +65,7 @@ type StreamDelta struct {
 	Content string `json:"content,omitempty"`
 }
 
-// --- Project Models ---
+// --- Project Models ---.
 type Project struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`
@@ -84,7 +84,7 @@ type CreateProjectParams struct {
 	Visibility  string `json:"visibility,omitempty"` // "public" | "private"
 }
 
-// --- API Key Models ---
+// --- API Key Models ---.
 
 type APIKey struct {
 	ID          string     `json:"id"`
@@ -117,7 +117,7 @@ type DailyStat struct {
 	CostUSD float64 `json:"cost_usd"`
 }
 
-// Metric Models
+// Metric Models.
 type MetricsResponse struct {
 	Period    string               `json:"period"`
 	StartDate time.Time            `json:"start_date"`
