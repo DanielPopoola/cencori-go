@@ -65,7 +65,7 @@ func doRequest[Req any, Resp any](
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("CENCORI_API_KEY", c.ApiKey)
+	req.Header.Set("CENCORI_API_KEY", c.APIKey)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {

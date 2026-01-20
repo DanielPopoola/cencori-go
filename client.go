@@ -20,8 +20,12 @@ func WithBaseURL(baseURL string) Option {
 	return func(c *ClientOptions) { c.BaseURL = baseURL }
 }
 
+func WithTimeout(timeout time.Duration) Option {
+	return func(c *ClientOptions) { c.Timeout = timeout }
+}
+
 type Client struct {
-	ApiKey     string
+	APIKey     string
 	BaseURL    string
 	httpClient *http.Client
 
@@ -47,7 +51,7 @@ func NewClient(opts ...Option) (*Client, error) {
 	}
 
 	c := &Client{
-		ApiKey:  config.APIKey,
+		APIKey:  config.APIKey,
 		BaseURL: config.BaseURL,
 		httpClient: &http.Client{
 			Timeout: config.Timeout,

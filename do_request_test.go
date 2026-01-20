@@ -20,7 +20,7 @@ func TestDoRequest_Success(t *testing.T) {
 	defer server.Close()
 
 	client := &Client{
-		ApiKey:     "test-key",
+		APIKey:     "test-key",
 		BaseURL:    server.URL,
 		httpClient: &http.Client{},
 	}
@@ -46,7 +46,7 @@ func TestDoRequest_401MapsToTypedError(t *testing.T) {
 	defer server.Close()
 
 	client := &Client{
-		ApiKey:     "wrong-key",
+		APIKey:     "wrong-key",
 		BaseURL:    server.URL,
 		httpClient: &http.Client{},
 	}

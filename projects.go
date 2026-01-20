@@ -52,9 +52,9 @@ func (s *ProjectsService) Get(ctx context.Context, orgSlug, projectSlug string) 
 // Update updates a project in the specified organization.
 // It sends a PATCH request to the projects API endpoint with the given organization and project slugs.
 // Returns an error if the request fails.
-func (s *ProjectsService) Update(ctx context.Context, orgSlug, projectSlug string) error {
+func (s *ProjectsService) Update(ctx context.Context, orgSlug, projectSlug string, params CreateProjectParams) error {
 	path := fmt.Sprintf("/api/organizations/%s/projects/%s", orgSlug, projectSlug)
-	_, err := doRequest[any, any](s.client, ctx, "PATCH", path, nil)
+	_, err := doRequest[CreateProjectParams, any](s.client, ctx, "PATCH", path, &params)
 	return err
 }
 

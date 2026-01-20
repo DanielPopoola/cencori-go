@@ -50,7 +50,7 @@ func (s *ChatService) Stream(ctx context.Context, params *ChatParams) (<-chan St
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("CENCORI_API_KEY", s.client.ApiKey)
+	req.Header.Set("CENCORI_API_KEY", s.client.APIKey)
 	req.Header.Set("Accept", "text/event-stream")
 
 	resp, err := s.client.httpClient.Do(req) //nolint:bodyclose // Body is closed by the streaming goroutine
