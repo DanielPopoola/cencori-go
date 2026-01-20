@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+const maxResponseSize = 10 * 1024 * 1024
+
 func handleError(resp *http.Response) error {
 	body, _ := io.ReadAll(resp.Body) //nolint:errcheck // reading the response body; error can be ignored here.
 	var apiErr APIError
@@ -77,8 +79,10 @@ func doRequest[Req any, Resp any](
 		return nil, handleError(resp)
 	}
 
+	limitedBody := io.LimitReader(resp.Body, maxResponseSize)
+
 	var result Resp
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.NewDecoder(limitedBody).Decode(&result); err != nil {
 		return nil, fmt.Errorf("decode response: %w", err)
 	}
 

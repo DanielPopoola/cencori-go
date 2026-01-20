@@ -93,9 +93,16 @@ func (s *ChatService) Stream(ctx context.Context, params *ChatParams) (<-chan St
 		defer close(chunks)
 		defer resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
 
+		done := make(chan struct{})
+		defer close(done)
+
 		go func() {
-			<-ctx.Done()
-			resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
+			select {
+			case <-ctx.Done():
+				resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
+			case <-done:
+				return
+			}
 		}()
 
 		reader := bufio.NewReader(resp.Body)
