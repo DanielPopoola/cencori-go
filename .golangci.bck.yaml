@@ -1,0 +1,86 @@
+run:
+  timeout: 5m
+  tests: true
+  build-tags:
+    - integration
+
+linters:
+  default: none 
+  enable:
+    - errcheck
+    - ineffassign
+    - staticcheck   # Note: staticcheck now includes gosimple and stylecheck
+    - unused
+    - misspell
+    - revive
+    - gocritic
+    - godot
+    - gocyclo
+    - dupl
+    - prealloc
+    - unconvert
+    - unparam
+    - bodyclose
+    - noctx
+    - gosec
+
+  settings:
+    errcheck:
+      check-blank: true
+      check-type-assertions: true
+      
+    govet:
+      # 'check-shadowing' is removed. Use 'enable' to turn on the shadow analyzer.
+      enable:
+        - shadow
+      
+    gocyclo:
+      min-complexity: 15
+      
+    dupl:
+      threshold: 100
+      
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+        - style
+      disabled-checks:
+        - commentedOutCode
+        - ifElseChain
+        
+    revive:
+      rules:
+        - name: exported
+          severity: warning
+        - name: var-naming
+          severity: warning
+        - name: package-comments
+          severity: warning
+
+# Formatters (gofmt, goimports, etc.) moved to a dedicated section in v2
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - dupl
+        - gosec
+    - path: examples/
+      linters:
+        - revive
+        
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  # 'format' is now 'formats' and requires a list
+  formats:
+    - format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
