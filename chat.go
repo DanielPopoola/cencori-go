@@ -21,9 +21,9 @@ type ChatService struct {
 // It disables streaming and makes a synchronous request to the /api/ai/chat endpoint.
 // The context can be used to cancel the request or set a timeout.
 // It returns a ChatResponse on success or an error if the request fails.
-func (s *ChatService) Chat(ctx context.Context, params ChatParams) (*ChatResponse, error) {
+func (s *ChatService) Chat(ctx context.Context, params *ChatParams) (*ChatResponse, error) {
 	params.Stream = false
-	return doRequest[ChatParams, ChatResponse](s.client, ctx, "POST", "/api/ai/chat", &params)
+	return doRequest[ChatParams, ChatResponse](s.client, ctx, "POST", "/api/ai/chat", params)
 }
 
 // Stream sends a chat request with streaming enabled and returns a channel that receives
@@ -31,7 +31,7 @@ func (s *ChatService) Chat(ctx context.Context, params ChatParams) (*ChatRespons
 // sends a "[DONE]" message or an error occurs. The context can be used to cancel the stream.
 // If the context is cancelled, it simply closes.
 // The returned channel will be closed when the stream ends or an error occurs.
-func (s *ChatService) Stream(ctx context.Context, params ChatParams) (<-chan StreamChunk, error) {
+func (s *ChatService) Stream(ctx context.Context, params *ChatParams) (<-chan StreamChunk, error) {
 	params.Stream = true
 
 	jsonData, err := json.Marshal(params)
@@ -53,25 +53,27 @@ func (s *ChatService) Stream(ctx context.Context, params ChatParams) (<-chan Str
 	req.Header.Set("CENCORI_API_KEY", s.client.ApiKey)
 	req.Header.Set("Accept", "text/event-stream")
 
-	resp, err := s.client.httpClient.Do(req)
+	resp, err := s.client.httpClient.Do(req) //nolint:bodyclose // Body is closed by the streaming goroutine
 	if err != nil {
 		return nil, fmt.Errorf("execute request: %w", err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		defer resp.Body.Close()
-		return nil, handleError(resp)
+		err := handleError(resp)
+		resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
+
+		return nil, err
 	}
 
 	chunks := make(chan StreamChunk)
 
 	go func() {
 		defer close(chunks)
-		defer resp.Body.Close()
+		defer resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
 
 		go func() {
 			<-ctx.Done()
-			resp.Body.Close()
+			resp.Body.Close() //nolint:errcheck // Closing the response body; error can be ignored here.
 		}()
 
 		reader := bufio.NewReader(resp.Body)
