@@ -4,17 +4,17 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/cencori/cencori-go)](https://goreportcard.com/report/github.com/cencori/cencori-go)
 [![CI](https://github.com/cencori/cencori-go/workflows/Go/badge.svg)](https://github.com/cencori/cencori-go/actions)
 
-Official Go SDK for the Cencori AI API - unified access to OpenAI, Anthropic, and Google models with built-in security, logging, and cost tracking.
+Official Go SDK for the Cencori - unified access to OpenAI, Anthropic, and Google models with built-in security, logging, and cost tracking.
 
 ## Features
 
-- 🤖 **Multi-provider support** - OpenAI, Anthropic, Google with one API
-- 💬 **Chat & Completions** - Conversational AI and text generation
-- 🔢 **Embeddings** - Vector embeddings for semantic search
-- 🔒 **Built-in security** - Automatic PII detection and content filtering
-- 📊 **Complete analytics** - Token usage and cost tracking
-- ⚡ **Streaming support** - Real-time response streaming
-- 🎯 **Type-safe** - Full Go type safety with generics
+- **Multi-provider support** - OpenAI, Anthropic, Google with one API
+- **Chat & Completions** - Conversational AI and text generation
+- **Embeddings** - Vector embeddings for semantic search
+- **Built-in security** - Automatic PII detection and content filtering
+- **Complete analytics** - Token usage and cost tracking
+- **Streaming support** - Real-time response streaming
+- **Type-safe** - Full Go type safety with generics
 
 ## Installation
 
