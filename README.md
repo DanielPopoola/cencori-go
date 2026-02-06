@@ -214,6 +214,14 @@ make lint
 make verify
 ```
 
+## Related Tools
+
+**[@cencori/scan](https://www.npmjs.com/package/@cencori/scan)** — Security scanner for AI apps. Detects hardcoded secrets, PII, and vulnerabilities with AI-powered auto-fix.
+
+```bash
+npx @cencori/scan
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
